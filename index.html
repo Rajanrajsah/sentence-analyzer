@@ -1,1 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sentence Analyzer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+<div class="container">
+    <div class="header">
+        <h1>Sentence Analyzer</h1>
+        <label class="switch">
+            <input type="checkbox" id="themeToggle">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <textarea id="sentence" placeholder="Type your sentence here..."></textarea>
+
+    <button onclick="exportResults()">Export Results</button>
+
+    <div class="results">
+        <p>Lowercase Letters: <span id="lowercase">0</span></p>
+        <p>Uppercase Letters: <span id="uppercase">0</span></p>
+        <p>Digits: <span id="digits">0</span></p>
+        <p>Special Characters: <span id="special">0</span></p>
+        <p>Spaces: <span id="spaces">0</span></p>
+        <p>Total Letters: <span id="letters">0</span></p>
+        <p>Total Words: <span id="words">0</span></p>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
