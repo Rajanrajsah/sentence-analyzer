@@ -21,7 +21,7 @@ A web-based application that analyzes a sentence in real-time and provides detai
 - JavaScript
 
 ## 🌐 Live Demo
-https://your-username.github.io/sentence-analyzer/
+https://rajanrajsah.github.io/sentence-analyzer/
 
 ## 📸 Preview
 (Add screenshot here)
