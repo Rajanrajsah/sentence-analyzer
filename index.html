@@ -1,29 +1,42 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Sentence Analyzer</title>
+
+    <!-- CSS -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- Chart.js CDN -->
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
-
 <div class="container">
+
+    <!-- Header -->
     <div class="header">
         <h1>Sentence Analyzer</h1>
+
+        <!-- Dark Mode Toggle -->
         <label class="switch">
             <input type="checkbox" id="themeToggle">
             <span class="slider"></span>
         </label>
     </div>
 
+    <!-- Input -->
     <textarea id="sentence" placeholder="Type your sentence here..."></textarea>
 
+    <!-- Live Highlight -->
+    <h3>Live Highlight Preview</h3>
+    <div id="highlightedText" class="highlight-box"></div>
+
+    <!-- Export -->
     <button onclick="exportResults()">Export Results</button>
 
+    <!-- Results -->
     <div class="results">
         <p>Lowercase Letters: <span id="lowercase">0</span></p>
         <p>Uppercase Letters: <span id="uppercase">0</span></p>
@@ -35,11 +48,13 @@
     </div>
 
     <!-- Chart -->
-    <canvas id="analysisChart" height="200"></canvas>
+    <div class="results">
+        <canvas id="analysisChart" height="200"></canvas>
+    </div>
+
 </div>
 
-<!-- Your JS (always at bottom) -->
+<!-- JavaScript (ALWAYS load at bottom) -->
 <script src="script.js"></script>
-
 </body>
 </html>
