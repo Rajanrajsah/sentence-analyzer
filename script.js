@@ -1,114 +1,110 @@
+const sentence = document.getElementById("sentence");
+const highlightedText = document.getElementById("highlightedText");
+const themeToggle = document.getElementById("themeToggle");
+
 let chart;
 
-const sentenceInput = document.getElementById("sentence");
-const toggle = document.getElementById("themeToggle");
+/* Live analysis */
+sentence.addEventListener("input", analyzeText);
 
-sentenceInput.addEventListener("input", analyzeSentence);
+function analyzeText() {
+    const text = sentence.value;
 
-toggle.addEventListener("change", () => {
-    document.body.classList.toggle("dark");
-});
-
-function analyzeSentence() {
-    let text = sentenceInput.value;
-
-    let lowercase = 0, uppercase = 0, digits = 0, special = 0, spaces = 0, letters = 0;
+    let lower = 0, upper = 0, digits = 0, special = 0, spaces = 0;
+    let highlighted = "";
 
     for (let char of text) {
-        if (char >= 'a' && char <= 'z') {
-            lowercase++; letters++;
-        } else if (char >= 'A' && char <= 'Z') {
-            uppercase++; letters++;
-        } else if (char >= '0' && char <= '9') {
+        if (/[a-z]/.test(char)) {
+            lower++;
+            highlighted += `<span class="lower">${char}</span>`;
+        } else if (/[A-Z]/.test(char)) {
+            upper++;
+            highlighted += `<span class="upper">${char}</span>`;
+        } else if (/[0-9]/.test(char)) {
             digits++;
-        } else if (char === ' ') {
+            highlighted += `<span class="digit">${char}</span>`;
+        } else if (char === " ") {
             spaces++;
+            highlighted += `<span class="space"> </span>`;
         } else {
             special++;
+            highlighted += `<span class="special">${char}</span>`;
         }
     }
 
-    let words = text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
+    const letters = lower + upper;
+    const words = text.trim() ? text.trim().split(/\s+/).length : 0;
 
-    document.getElementById("lowercase").innerText = lowercase;
-    document.getElementById("uppercase").innerText = uppercase;
-    document.getElementById("digits").innerText = digits;
-    document.getElementById("special").innerText = special;
-    document.getElementById("spaces").innerText = spaces;
-    document.getElementById("letters").innerText = letters;
-    document.getElementById("words").innerText = words;
+    // Update UI
+    document.getElementById("lowercase").textContent = lower;
+    document.getElementById("uppercase").textContent = upper;
+    document.getElementById("digits").textContent = digits;
+    document.getElementById("special").textContent = special;
+    document.getElementById("spaces").textContent = spaces;
+    document.getElementById("letters").textContent = letters;
+    document.getElementById("words").textContent = words;
 
-    updateChart(lowercase, uppercase, digits, special, spaces);
+    highlightedText.innerHTML = highlighted;
+
+    updateChart(lower, upper, digits, special, spaces);
 }
 
+/* Chart */
+function updateChart(lower, upper, digits, special, spaces) {
+    const ctx = document.getElementById("analysisChart");
+
+    if (!chart) {
+        chart = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: ["Lowercase", "Uppercase", "Digits", "Special", "Spaces"],
+                datasets: [{
+                    label: "Character Count",
+                    data: [lower, upper, digits, special, spaces],
+                    backgroundColor: [
+                        "#2ecc71",
+                        "#3498db",
+                        "#e67e22",
+                        "#e74c3c",
+                        "#95a5a6"
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    } else {
+        chart.data.datasets[0].data = [lower, upper, digits, special, spaces];
+        chart.update();
+    }
+}
+
+/* Export results */
 function exportResults() {
-    let resultText = `
-Sentence Analysis Report
+    const data = `
+Sentence Analyzer Report
 
-Lowercase Letters: ${lowercase.innerText}
-Uppercase Letters: ${uppercase.innerText}
-Digits: ${digits.innerText}
-Special Characters: ${special.innerText}
-Spaces: ${spaces.innerText}
-Total Letters: ${letters.innerText}
-Total Words: ${words.innerText}
-`;
+Lowercase Letters: ${lowercase.textContent}
+Uppercase Letters: ${uppercase.textContent}
+Digits: ${digits.textContent}
+Special Characters: ${special.textContent}
+Spaces: ${spaces.textContent}
+Total Letters: ${letters.textContent}
+Total Words: ${words.textContent}
+    `;
 
-    let blob = new Blob([resultText], { type: "text/plain" });
-    let link = document.createElement("a");
+    const blob = new Blob([data], { type: "text/plain" });
+    const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = "sentence-analysis.txt";
     link.click();
 }
 
-function updateChart(lowercase, uppercase, digits, special, spaces) {
-    const ctx = document.getElementById("analysisChart").getContext("2d");
-
-    if (chart) {
-        chart.data.datasets[0].data = [
-            lowercase,
-            uppercase,
-            digits,
-            special,
-            spaces
-        ];
-        chart.update();
-        return;
-    }
-
-    chart = new Chart(ctx, {
-        type: "bar",
-        data: {
-            labels: [
-                "Lowercase",
-                "Uppercase",
-                "Digits",
-                "Special",
-                "Spaces"
-            ],
-            datasets: [{
-                label: "Character Count",
-                data: [
-                    lowercase,
-                    uppercase,
-                    digits,
-                    special,
-                    spaces
-                ],
-                backgroundColor: [
-                    "#4caf50",
-                    "#2196f3",
-                    "#ff9800",
-                    "#f44336",
-                    "#9e9e9e"
-                ]
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: false }
-            }
-        }
-    });
-}
+/* Dark mode */
+themeToggle.addEventListener("change", () => {
+    document.body.classList.toggle("dark");
+});
