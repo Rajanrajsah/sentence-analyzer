@@ -1,0 +1,13 @@
+name: Bash Test
+
+on: [push]
+
+jobs:
+  run-bash:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run bash
+        run: |
+          echo "Hello from GitHub Actions"
+          ls -la
